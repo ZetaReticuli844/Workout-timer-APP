@@ -9,12 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 //stack navigator
 const Stack = createNativeStackNavigator();
 
-type RootStackParamList = {
-  Home: undefined;
-  CreateWorkout: undefined;
-  WorkoutTimer: {workout: Workout};
 
-};
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -38,3 +33,10 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({})
+
+
+
+
+
+
+

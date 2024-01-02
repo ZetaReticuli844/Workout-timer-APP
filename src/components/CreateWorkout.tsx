@@ -80,26 +80,29 @@ const CreateWorkout = ({navigation}:Props) => {
       <Text style={styles.headerText}>Workout</Text>
       <Text>Workout Name</Text>
       <View style={styles.inputText}>
-        <TextInput placeholder='ENTER WORKOUT NAME' onChangeText={(text) => setWorkout({ ...workout, name: text })} />
+        <TextInput placeholder="ENTER WORKOUT NAME" onChangeText={(text) => setWorkout({ ...workout, name: text })} />
       </View>
       <Text>Set</Text>
-      <CounterInput horizontal='true' onChange={(input) => setWorkout({ ...workout, sets: input })} />
+      <CounterInput horizontal onChange={(input) => setWorkout({ ...workout, sets: input })} />
       <Text>Rep</Text>
-      <CounterInput horizontal='true' onChange={(input) => setWorkout({ ...workout, reps: input })} />
+      <CounterInput horizontal onChange={(input) => setWorkout({ ...workout, reps: input })} />
       <Text>Rest Time</Text>
-      <CounterInput horizontal='true' onChange={(input) => setWorkout({ ...workout, restTime: input })} />
+      <CounterInput horizontal onChange={(input) => setWorkout({ ...workout, restTime: input })} />
       <View style={styles.btnContainer}>
-        <Button title='Save' onPress={async () => {
-          await saveWorkout(workout);
-          setWorkout({
-            id: 0,
-            name: '',
-            sets: 0,
-            reps: 0,
-            restTime: 0,
-          });
-          fetchWorkouts();
-        }} />
+        <Button
+          title="Save"
+          onPress={async () => {
+            await saveWorkout(workout);
+            setWorkout({
+              id: 0,
+              name: '',
+              sets: 0,
+              reps: 0,
+              restTime: 0,
+            });
+            fetchWorkouts();
+          }}
+        />
       </View>
       <View>
         {storedWorkouts.length > 0 ? (
@@ -110,10 +113,15 @@ const CreateWorkout = ({navigation}:Props) => {
               <Text>Reps: {workout.reps}</Text>
               <Text>Rest Time: {workout.restTime}</Text>
               <Button title="Delete workout" onPress={() => deleteWorkout(workout.id)} />
-              <TouchableOpacity onPress={() => navigation.navigate('WorkoutTimer', {
-                workout: workout,
-              })}>
-                <Text>Start Workout</Text>
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={() =>
+                  navigation.navigate('WorkoutTimer', {
+                    workout: workout,
+                  })
+                }
+              >
+                <Text style={styles.startButtonText}>Start Workout</Text>
               </TouchableOpacity>
             </View>
           ))
@@ -121,12 +129,10 @@ const CreateWorkout = ({navigation}:Props) => {
           <Text>No workouts</Text>
         )}
       </View>
-      <Button title='Clear' onPress={clearAll} />
+      <Button title="Clear" onPress={clearAll} />
     </View>
   );
-}
-
-export default CreateWorkout;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -160,6 +166,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
-  
+  startButton: {
+    backgroundColor: '#711DB0', // Purple color
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  startButtonText: {
+    color: '#FFFFFF', // White text color
+    textAlign: 'center',
+  },
 });
 
+export default CreateWorkout;

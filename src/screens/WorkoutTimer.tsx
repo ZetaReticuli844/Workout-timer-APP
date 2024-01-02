@@ -1,27 +1,83 @@
-import { StyleSheet, Text, View } from 'react-native'
-import {useEffect,useState} from 'react'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type workoutTimerProps=NativeStackScreenProps<RootStackParamList,'WorkoutTimer'>
+type WorkoutTimerProps = NativeStackScreenProps<RootStackParamList, 'WorkoutTimer'>;
 
+const WorkoutTimer = ({ route }: WorkoutTimerProps) => {
+  const { workout } = route.params;
+  const [sets, setSets] = useState<number>(workout.sets);
+  const [rest, setRest] = useState<number>(workout.restTime);
+  const intervalId = useRef(null);
+  const [count, setCount] = useState<number>(workout.reps);
 
+  const startCountDown = () => {
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+    }
 
-const WorkoutTimer = ({route}:workoutTimerProps) => {
-  const {workout}=route.params;
-  
+    intervalId.current = setInterval(() => {
+      setCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
+    }, 1000);
+  };
+
+  const restId = useRef(null);
+
+  const startRest = () => {
+    if (restId.current) {
+      clearInterval(restId.current);
+    }
+
+    restId.current = setInterval(() => {
+      setRest((prevRest) => (prevRest > 0 ? prevRest - 1 : 0));
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (count === 0 && sets !== 0) {
+      setRest(workout.restTime);
+      startRest();
+    }
+  }, [count]);
+
+  const countSets = () => {
+    setSets((prevSets) => (prevSets > 0 ? prevSets - 1 : 0));
+  };
+
+  useEffect(() => {
+    if (rest === 0) {
+      countSets();
+      setCount(workout.reps);
+      startCountDown();
+    }
+  }, [rest]);
+
+  const pauseWorkout = () => {};
 
   return (
-    <View>
-      <Text>Name:{workout.name}</Text>
-      <Text>Sets:{workout.sets}</Text>
-      <Text>Reps:{workout.reps}</Text>
-      <Text>Rest:{workout.restTime}</Text>
-
-
+    <View style={styles.container}>
+      <Text style={styles.text}>Rep: {count}</Text>
+      <Text style={styles.text}>Sets: {sets}</Text>
+      <Text style={styles.text}>Rest: {rest}</Text>
+      <Button title="Start" onPress={startCountDown} style={styles.button} />
     </View>
-  )
-}
+  );
+};
 
-export default WorkoutTimer
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#711DB0', // Purple color
+    color: '#FFFFFF', // White text color
+  },
+});
 
-const styles = StyleSheet.create({})
+export default WorkoutTimer;
