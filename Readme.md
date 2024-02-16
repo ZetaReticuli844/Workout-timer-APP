@@ -24,7 +24,7 @@ To run this app on your local machine, follow these steps:
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/ZetaReticuli844/Workout-timer-APP.git
     ```
 
 2. Navigate to the project directory:
